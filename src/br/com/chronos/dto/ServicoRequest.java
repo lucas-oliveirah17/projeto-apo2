@@ -1,5 +1,5 @@
 package br.com.chronos.dto;
 
-public record ServicoRequest() {
+public class ServicoRequest {
 
 }

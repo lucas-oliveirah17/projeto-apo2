@@ -1,5 +1,5 @@
 package br.com.chronos.dto;
 
-public record UsuarioResponse() {
+public class UsuarioResponse {
 
 }
