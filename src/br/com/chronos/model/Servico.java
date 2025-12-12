@@ -2,7 +2,7 @@ package br.com.chronos.model;
 
 import java.math.BigDecimal;
 
-public class Servico {
+public class Servico implements Entidade {
     
     private Long id;
     private String nome;

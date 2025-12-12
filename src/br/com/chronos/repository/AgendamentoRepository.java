@@ -14,10 +14,9 @@ import br.com.chronos.model.Agendamento;
 import br.com.chronos.model.enums.StatusAgendamento;
 import br.com.chronos.util.DBConnection;
 
-public class AgendamentoRepository {
+public class AgendamentoRepository extends BaseRepository<Agendamento> {
 
-    private Connection connection;
-    private final String table = "agendamentos";
+    private static final String TABLE = "agendamentos";
     
     // Repositórios auxiliares para montar os relacionamentos
     private UsuarioRepository usuarioRepository;
@@ -25,31 +24,10 @@ public class AgendamentoRepository {
     private ServicoRepository servicoRepository;
 
     public AgendamentoRepository() {
-        this.connection = new DBConnection().getConnection();
+        super(TABLE);
         this.usuarioRepository = new UsuarioRepository();
         this.profissionalRepository = new ProfissionalRepository();
         this.servicoRepository = new ServicoRepository();
-    }
-
-    /**
-     * Retorna todos os agendamentos do banco.
-     */
-    public List<Agendamento> findAll() {
-        List<Agendamento> agendamentos = new ArrayList<>();
-        String sql = "SELECT * FROM " + table + " WHERE ativo = true ORDER BY data_hora_inicio DESC";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {        
-            while (rs.next()) {
-                agendamentos.add(mapResultSetToAgendamento(rs));
-            }
-        
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erro ao buscar agendamentos", e);
-        }
-        
-        return agendamentos;
     }
     
     /**
@@ -57,14 +35,14 @@ public class AgendamentoRepository {
      */
     public List<Agendamento> findByClienteId(Long clienteId) {
         List<Agendamento> agendamentos = new ArrayList<>();
-        String sql = "SELECT * FROM " + table + " WHERE cliente_id = ? AND ativo = true ORDER BY data_hora_inicio DESC";
+        String sql = "SELECT * FROM " + tableName + " WHERE cliente_id = ? AND ativo = true ORDER BY data_hora_inicio DESC";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, clienteId);
             
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    agendamentos.add(mapResultSetToAgendamento(rs));
+                    agendamentos.add(mapResultSet(rs));
                 }
             }
         
@@ -81,14 +59,14 @@ public class AgendamentoRepository {
      */
     public List<Agendamento> findByProfissionalId(Long profissionalId) {
         List<Agendamento> agendamentos = new ArrayList<>();
-        String sql = "SELECT * FROM " + table + " WHERE profissional_id = ? AND ativo = true ORDER BY data_hora_inicio DESC";
+        String sql = "SELECT * FROM " + tableName + " WHERE profissional_id = ? AND ativo = true ORDER BY data_hora_inicio DESC";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, profissionalId);
             
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    agendamentos.add(mapResultSetToAgendamento(rs));
+                    agendamentos.add(mapResultSet(rs));
                 }
             }
         
@@ -100,56 +78,6 @@ public class AgendamentoRepository {
         return agendamentos;
     }
 
-    /**
-     * Retorna o agendamento pelo ID do banco.
-     */
-    public Agendamento findById(Long id) {
-        String sql = "SELECT * FROM " + table + " WHERE id = ?";
-        
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, id);
-            
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSetToAgendamento(rs);
-                }
-            }
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erro ao buscar agendamento por ID", e);
-        }
-        
-        return null;
-    }
-
-    /**
-     * Salva ou atualiza o agendamento no banco.
-     */
-    public Agendamento save(Agendamento agendamento) {
-        if (agendamento.getId() == null) {
-            return insert(agendamento);
-        } else {
-            return update(agendamento);
-        }
-    }
-    
-    /**
-     * Deleta (SOFT DELETE) o agendamento do banco.
-     */
-    public void deleteById(Long id) {
-        String sql = "UPDATE " + table + " SET ativo = false WHERE id = ?";
-        
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, id);
-            stmt.executeUpdate();
-        
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erro ao deletar agendamento", e);
-        }
-    }
-
     // ========================================================================
     // MÉTODOS AUXILIARES
     // ========================================================================
@@ -157,8 +85,9 @@ public class AgendamentoRepository {
     /**
      * Insere o usuário no banco
      */
-    private Agendamento insert(Agendamento agendamento) {
-        String sql = "INSERT INTO " + table + " (cliente_id, profissional_id, servico_id, data_hora_inicio, data_hora_fim, status, ativo, criado_em, atualizado_em) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    @Override
+    protected Agendamento insert(Agendamento agendamento) {
+        String sql = "INSERT INTO " + tableName + " (cliente_id, profissional_id, servico_id, data_hora_inicio, data_hora_fim, status, ativo, criado_em, atualizado_em) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {    
             stmt.setLong(1, agendamento.getCliente().getId());
@@ -195,9 +124,10 @@ public class AgendamentoRepository {
     /**
      * Atualiza o usuário no banco
      */
-    private Agendamento update(Agendamento agendamento) {
+    @Override
+    protected Agendamento update(Agendamento agendamento) {
         // Geralmente no update não mudamos o cliente ou criado_em
-        String sql = "UPDATE " + table + " SET profissional_id=?, servico_id=?, data_hora_inicio=?, data_hora_fim=?, status=?, atualizado_em=?, ativo=? WHERE id=?";
+        String sql = "UPDATE " + tableName + " SET profissional_id=?, servico_id=?, data_hora_inicio=?, data_hora_fim=?, status=?, atualizado_em=?, ativo=? WHERE id=?";
        
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, agendamento.getProfissional().getId());
@@ -222,7 +152,8 @@ public class AgendamentoRepository {
         }
     }
 
-    private Agendamento mapResultSetToAgendamento(ResultSet rs) throws SQLException {
+    @Override
+    protected Agendamento mapResultSet(ResultSet rs) throws SQLException {
         Agendamento agendamento = new Agendamento();
         agendamento.setId(rs.getLong("id"));
         

@@ -1,6 +1,6 @@
 package br.com.chronos.model;
 
-public class Profissional {
+public class Profissional implements Entidade {
     private Long id;
     private Usuario usuario;
     private String especialidades;

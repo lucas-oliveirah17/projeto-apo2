@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import br.com.chronos.model.enums.PerfilUsuario;
 
-public class Usuario { 
+public class Usuario implements Entidade { 
     private Long id;
     private String nome;
     private String email;

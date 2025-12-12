@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import br.com.chronos.model.enums.StatusAgendamento;
 
-public class Agendamento {
+public class Agendamento implements Entidade {
     private Long id;
     private Usuario cliente;
     private Profissional profissional;
