@@ -27,7 +27,7 @@ public class DBConnection {
 	public DBConnection() {
 		this.setHost	("localhost");
 		this.setPort	("3306");
-		this.setSchema	("chronos-apo2");
+		this.setSchema	("chronos_apo2");
 		this.setUser	("root");
 		this.setPassword("");
 		this.doConnection();
