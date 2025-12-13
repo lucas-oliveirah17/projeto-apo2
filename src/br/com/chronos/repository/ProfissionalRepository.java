@@ -1,16 +1,12 @@
 package br.com.chronos.repository;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+
 
 import br.com.chronos.model.Profissional;
-import br.com.chronos.model.Usuario;
-import br.com.chronos.util.DBConnection;
 
 public class ProfissionalRepository extends BaseRepository<Profissional> {
 

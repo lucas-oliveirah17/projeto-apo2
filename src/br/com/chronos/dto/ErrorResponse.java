@@ -1,6 +1,7 @@
 package br.com.chronos.dto;
 
 public class ErrorResponse {
+    
     private int status;
     private String message;
     private long timestamp;

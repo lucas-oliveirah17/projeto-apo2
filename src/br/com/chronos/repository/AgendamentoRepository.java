@@ -1,6 +1,5 @@
 package br.com.chronos.repository;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +11,6 @@ import java.util.List;
 
 import br.com.chronos.model.Agendamento;
 import br.com.chronos.model.enums.StatusAgendamento;
-import br.com.chronos.util.DBConnection;
 
 public class AgendamentoRepository extends BaseRepository<Agendamento> {
 
