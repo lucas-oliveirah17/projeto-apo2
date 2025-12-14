@@ -9,6 +9,7 @@ public class UsuarioResponse {
     private String email;
     private String telefone;
     private String perfil; // Ex: "Cliente"
+    private Integer perfilId;
     private boolean ativo;
 
     public UsuarioResponse(Usuario usuario) {
@@ -16,7 +17,10 @@ public class UsuarioResponse {
         this.nome = usuario.getNome();
         this.email = usuario.getEmail();
         this.telefone = usuario.getTelefone();
-        this.perfil = (usuario.getPerfil() != null) ? usuario.getPerfil().getDescricao() : "";
+        if (usuario.getPerfil() != null) {
+            this.perfil = usuario.getPerfil().getDescricao();
+            this.perfilId = usuario.getPerfil().getCodigo(); // Adicionado
+        }
         this.ativo = usuario.isAtivo();
     }
 
@@ -58,6 +62,14 @@ public class UsuarioResponse {
 
     public void setPerfil(String perfil) {
         this.perfil = perfil;
+    }
+    
+    public Integer getPerfilId() {
+        return perfilId;
+    }
+
+    public void setPerfilId(Integer perfilId) {
+        this.perfilId = perfilId;
     }
 
     public boolean isAtivo() {
