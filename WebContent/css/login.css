@@ -1,0 +1,42 @@
+.login-wrapper {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    background-color: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 1rem;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.form-control-dark {
+    background-color: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+}
+
+.form-control-dark:focus {
+    background-color: rgba(15, 23, 42, 0.8);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 0 0 0.25rem rgba(0, 114, 255, 0.25);
+}
+
+.form-control-dark::placeholder {
+    color: #64748b;
+}
+
+.login-title {
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}

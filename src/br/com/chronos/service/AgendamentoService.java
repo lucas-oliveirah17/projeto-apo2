@@ -49,6 +49,18 @@ public class AgendamentoService {
                 .map(AgendamentoResponse::new)
                 .collect(Collectors.toList());
     }
+    
+    public AgendamentoResponse buscarPorId(Long id) {
+        // Chama o repositório
+        Agendamento agendamento = repository.findById(id);
+        
+        if (agendamento == null) {
+            throw new EntityNotFoundException("Agendamento não encontrado com id: " + id);
+        }
+        
+        // Converte para DTO (Response)
+        return new AgendamentoResponse(agendamento);
+    }
 
     public AgendamentoResponse criar(AgendamentoRequest dto) {
         // Busca e Valida Entidades

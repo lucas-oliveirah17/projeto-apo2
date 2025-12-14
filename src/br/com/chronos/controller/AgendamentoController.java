@@ -40,12 +40,11 @@ public class AgendamentoController extends HttpServlet {
                 }
                 Utilities.enviarJson(response, lista, HttpServletResponse.SC_OK);
             } else {
-                // Buscar por ID
                 Long id = Long.parseLong(pathInfo.substring(1));
-                // O Service precisa ter o buscarPorId(id), se não tiver, use listarTodos().stream...
-                // Assumindo que você vai adicionar ou já tem:
-                 // Utilities.enviarJson(response, service.buscarPorId(id), HttpServletResponse.SC_OK);
-                 // Caso não tenha implementado no service, deixe comentado ou implemente lá.
+                
+                AgendamentoResponse agendamento = service.buscarPorId(id);
+                
+                Utilities.enviarJson(response, agendamento, HttpServletResponse.SC_OK);
             }
         } catch (Exception e) {
             Utilities.enviarErro(response, e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
