@@ -12,6 +12,7 @@ import br.com.chronos.dto.UsuarioRequest;
 import br.com.chronos.dto.UsuarioResponse;
 import br.com.chronos.exception.EntityNotFoundException;
 import br.com.chronos.model.Usuario;
+import br.com.chronos.model.enums.PerfilUsuario;
 import br.com.chronos.repository.UsuarioRepository;
 import br.com.chronos.util.SendMail;
 import br.com.chronos.util.Utilities;
@@ -87,7 +88,11 @@ public class UsuarioService {
         if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
             usuarioExistente.setSenha(hashSenha(dto.getSenha()));
         }
-
+        
+        if (dto.getPerfilId() != null) {
+            usuarioExistente.setPerfil(PerfilUsuario.toEnum(dto.getPerfilId()));
+        }
+        
         Usuario atualizado = repository.save(usuarioExistente);
         return new UsuarioResponse(atualizado);
     }

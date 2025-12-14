@@ -41,10 +41,10 @@
 
                             <div class="mb-4">
                                 <label class="form-label">Perfil</label>
-                                <select class="form-select form-control-dark" name="perfil" required>
-                                    <option value="ADMIN">Administrador</option>
-                                    <option value="CLIENTE" selected>Cliente</option>
-                                    <option value="PROFISSIONAL">Profissional</option>
+                                <select class="form-select form-control-dark" name="perfilId" required>                                
+                                    <option value="3" selected>Cliente</option>
+                                    <option value="2">Profissional</option>
+                                    <option value="1">Administrador</option>
                                 </select>
                             </div>
 
