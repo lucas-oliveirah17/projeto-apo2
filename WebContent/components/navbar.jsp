@@ -72,7 +72,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-        // 1. Checa Login
+        // Checa Login
         const usuario = AuthService.getUsuarioLogado();
         const navGestao = document.getElementById("navGroupGestao");
         const btnLogin = document.getElementById("btnLogin");
@@ -88,7 +88,7 @@
             btnLogout.classList.add("hidden");
         }
 
-        // 2. Destaca o link ativo (Simulação do NavLink do React)
+        // Destaca o link ativo
         const currentPage = window.location.pathname.split("/").pop();
         const links = document.querySelectorAll('.nav-item');
         
@@ -98,7 +98,7 @@
             }
         });
 
-        // 3. Renderiza ícones
+        // Renderiza ícones
         lucide.createIcons();
     });
 </script>
