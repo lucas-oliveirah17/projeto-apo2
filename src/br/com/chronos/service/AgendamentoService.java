@@ -88,21 +88,7 @@ public class AgendamentoService {
         LocalDateTime fim = inicio.plusMinutes(servico.getDuracaoMinutos());
 
         // Verifica Conflitos de Horário (Lógica em Memória)
-        List<Agendamento> agendaProfissional = repository.findByProfissionalId(profissional.getId());
-                
-        boolean conflito = agendaProfissional.stream()
-                // IMPORTANTE: Ignora agendamentos que já foram cancelados para liberar o horário
-                .filter(a -> a.getStatus() != StatusAgendamento.CANCELADO_PELO_ADMINISTRADOR 
-                          && a.getStatus() != StatusAgendamento.CANCELADO_PELO_CLIENTE 
-                          && a.getStatus() != StatusAgendamento.CANCELADO_PELO_PROFISSIONAL) 
-                .anyMatch(a -> {
-                    // Lógica de interseção: (InicioA < FimB) E (FimA > InicioB)
-                    return inicio.isBefore(a.getDataHoraFim()) && fim.isAfter(a.getDataHoraInicio());
-                });
-
-        if (conflito) {
-            throw new IllegalArgumentException("O Profissional já possui agendamento neste horário.");
-        }
+        validarConflitoHorario(profissional.getId(), inicio, fim, null);
 
         // Monta e Salva
         Agendamento novo = new Agendamento();
@@ -118,11 +104,72 @@ public class AgendamentoService {
         return new AgendamentoResponse(repository.save(novo));
     }
     
+    public AgendamentoResponse atualizar(Long id, AgendamentoRequest dto) {
+        Agendamento existente = repository.findById(id);
+        if (existente == null) throw new EntityNotFoundException("Agendamento não encontrado.");
+        
+        // Atualiza Cliente (se mudou)
+        if (dto.getClienteId() != null) {
+            Usuario c = usuarioRepository.findById(dto.getClienteId());
+            if (c != null) existente.setCliente(c);
+        }
+
+        // Atualiza Profissional (se mudou)
+        if (dto.getProfissionalId() != null) {
+            Profissional p = profissionalRepository.findById(dto.getProfissionalId());
+            if (p != null) existente.setProfissional(p);
+        }
+
+        // Atualiza Serviço (se mudou)
+        if (dto.getServicoId() != null) {
+            Servico s = servicoRepository.findById(dto.getServicoId());
+            if (s != null) existente.setServico(s);
+        }
+        
+        // Atualiza Data/Hora e Recalcula Fim
+        if (dto.getDataHoraInicio() != null) {
+            LocalDateTime inicio = LocalDateTime.parse(dto.getDataHoraInicio());
+            existente.setDataHoraInicio(inicio);
+            
+            // Recalcula o fim baseado na duração do serviço (novo ou existente)
+            int duracao = existente.getServico().getDuracaoMinutos();
+            existente.setDataHoraFim(inicio.plusMinutes(duracao));
+        } else if (dto.getServicoId() != null) {
+            // Se mudou só o serviço, mas manteve a hora de inicio, tem que recalcular o fim também
+            int duracao = existente.getServico().getDuracaoMinutos();
+            existente.setDataHoraFim(existente.getDataHoraInicio().plusMinutes(duracao));
+        }
+
+        // Valida conflito excluindo o próprio agendamento (id)
+        validarConflitoHorario(existente.getProfissional().getId(), existente.getDataHoraInicio(), existente.getDataHoraFim(), id);
+        
+        Agendamento atualizado = repository.save(existente);
+        return new AgendamentoResponse(atualizado);
+    }
+    
     public void cancelar(Long id) {
         Agendamento a = repository.findById(id);
         if (a == null) throw new EntityNotFoundException("Agendamento não encontrado.");
         
         a.setStatus(StatusAgendamento.CANCELADO_PELO_ADMINISTRADOR);
         repository.save(a); 
+    }
+    
+    private void validarConflitoHorario(Long profissionalId, LocalDateTime inicio, LocalDateTime fim, Long ignorarAgendamentoId) {
+        List<Agendamento> agendaProfissional = repository.findByProfissionalId(profissionalId);
+        
+        boolean conflito = agendaProfissional.stream()
+            .filter(a -> a.getStatus() != StatusAgendamento.CANCELADO_PELO_ADMINISTRADOR 
+                      && a.getStatus() != StatusAgendamento.CANCELADO_PELO_CLIENTE 
+                      && a.getStatus() != StatusAgendamento.CANCELADO_PELO_PROFISSIONAL)
+            // Se for atualização, não compara com ele mesmo
+            .filter(a -> ignorarAgendamentoId == null || !a.getId().equals(ignorarAgendamentoId))
+            .anyMatch(a -> {
+                return inicio.isBefore(a.getDataHoraFim()) && fim.isAfter(a.getDataHoraInicio());
+            });
+
+        if (conflito) {
+            throw new IllegalArgumentException("O Profissional já possui agendamento neste horário.");
+        }
     }
 }

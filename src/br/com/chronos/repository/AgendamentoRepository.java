@@ -124,21 +124,21 @@ public class AgendamentoRepository extends BaseRepository<Agendamento> {
      */
     @Override
     protected Agendamento update(Agendamento agendamento) {
-        // Geralmente no update não mudamos o cliente ou criado_em
-        String sql = "UPDATE " + tableName + " SET profissional_id=?, servico_id=?, data_hora_inicio=?, data_hora_fim=?, status=?, atualizado_em=?, ativo=? WHERE id=?";
+        String sql = "UPDATE " + tableName + " SET cliente_id=?, profissional_id=?, servico_id=?, data_hora_inicio=?, data_hora_fim=?, status=?, atualizado_em=?, ativo=? WHERE id=?";
        
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, agendamento.getProfissional().getId());
-            stmt.setLong(2, agendamento.getServico().getId());
+            stmt.setLong(1, agendamento.getCliente().getId());
+            stmt.setLong(2, agendamento.getProfissional().getId());
+            stmt.setLong(3, agendamento.getServico().getId());
             
-            stmt.setTimestamp(3, Timestamp.valueOf(agendamento.getDataHoraInicio()));
-            stmt.setTimestamp(4, Timestamp.valueOf(agendamento.getDataHoraFim()));
+            stmt.setTimestamp(4, Timestamp.valueOf(agendamento.getDataHoraInicio()));
+            stmt.setTimestamp(5, Timestamp.valueOf(agendamento.getDataHoraFim()));
             
-            stmt.setInt(5, agendamento.getStatus().getCodigo());
-            stmt.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now())); // Atualiza data de modificação
-            stmt.setBoolean(7, agendamento.isAtivo());
+            stmt.setInt(6, agendamento.getStatus().getCodigo());
+            stmt.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
+            stmt.setBoolean(8, agendamento.isAtivo());
             
-            stmt.setLong(8, agendamento.getId());
+            stmt.setLong(9, agendamento.getId());
             
             stmt.executeUpdate();
             

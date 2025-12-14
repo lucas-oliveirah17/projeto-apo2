@@ -6,6 +6,11 @@ import br.com.chronos.model.Agendamento;
 public class AgendamentoResponse {
 
     private Long id;
+    
+    private Long clienteId;
+    private Long profissionalId;
+    private Long servicoId;
+    
     private String nomeCliente;
     private String nomeProfissional;
     private String nomeServico;
@@ -18,18 +23,24 @@ public class AgendamentoResponse {
         this.id = a.getId();
         
         if (a.getCliente() != null) {
+            this.clienteId = a.getCliente().getId();
             this.nomeCliente = a.getCliente().getNome();
         }
         
-        if (a.getProfissional() != null && a.getProfissional().getUsuario() != null) {
-            this.nomeProfissional = a.getProfissional().getUsuario().getNome();
+        if (a.getProfissional() != null) {
+            this.profissionalId = a.getProfissional().getId();
+            
+            if (a.getProfissional().getUsuario() != null) {
+                this.nomeProfissional = a.getProfissional().getUsuario().getNome();
+            }
         }
         
         if (a.getServico() != null) {
+            this.servicoId = a.getServico().getId(); // Adicionado
             this.nomeServico = a.getServico().getNome();
             this.preco = a.getServico().getPreco().toString();
         }
-        
+                
         // Formata para padrão brasileiro: "25/12/2025 14:30"
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         
@@ -49,6 +60,30 @@ public class AgendamentoResponse {
 
     public void setId(Long id) {
         this.id = id;
+    }
+    
+    public Long getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(Long clienteId) {
+        this.clienteId = clienteId;
+    }
+
+    public Long getProfissionalId() {
+        return profissionalId;
+    }
+
+    public void setProfissionalId(Long profissionalId) {
+        this.profissionalId = profissionalId;
+    }
+
+    public Long getServicoId() {
+        return servicoId;
+    }
+
+    public void setServicoId(Long servicoId) {
+        this.servicoId = servicoId;
     }
 
     public String getNomeCliente() {
