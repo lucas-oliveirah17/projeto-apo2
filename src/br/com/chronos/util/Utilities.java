@@ -17,7 +17,7 @@ public class Utilities {
 	}
 	
 	// Métodos de Checagem e Validação
-	public boolean checkEmail( String email ) {
+	public static boolean checkEmail( String email ) {
 		String  patternEmail = "^[a-zA-Z0-9]+[.a-zA-Z0-9]*@[a-zA-Z0-9]+[.a-zA-Z0-9]*[.a-zA-Z0-9]*[.a-zA-Z0-9]*$";
 	    Pattern padraoEmail= Pattern.compile(patternEmail, Pattern.CASE_INSENSITIVE);
 	    Matcher matcher = padraoEmail.matcher(email);  
