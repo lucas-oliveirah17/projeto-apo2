@@ -24,8 +24,8 @@ public class UsuarioService {
     // Configurações de E-mail
     private static final String SMTP_HOST = "sandbox.smtp.mailtrap.io"; 
     private static final String SMTP_PORT = "2525";
-    private static final String SMTP_USER = "d6bb1df6ffa752"; 
-    private static final String SMTP_PASS = "81eabef02b42c5";
+    private static final String SMTP_USER = "483ed04fc47b30"; 
+    private static final String SMTP_PASS = "241c7d0ee0a64f";
 
     public UsuarioService() {
         this.repository = new UsuarioRepository();
