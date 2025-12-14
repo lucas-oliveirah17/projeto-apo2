@@ -1,32 +1,157 @@
-.navbar-custom {
-    background-color: rgba(30, 41, 59, 0.9);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding: 1rem 0;
+/* Navbar Styles - Cópia Fiel do React */
+.navbar {
+    background-color: rgba(15, 23, 42, 0.8); /* Fundo escuro com opacidade */
+    backdrop-filter: blur(12px); /* Efeito de vidro */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 0.75rem 0;
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 .brand-text {
     font-size: 1.5rem;
-    font-weight: bold;
-    background: var(--primary-gradient);
+    font-weight: 700;
+    background: linear-gradient(135deg, #00C6FF 0%, #0072FF 100%);
     -webkit-background-clip: text;
-    background-clip: text;
+    background-clip: text; /* Correção para o Eclipse */
     -webkit-text-fill-color: transparent;
-    cursor: pointer;
 }
 
-.nav-link-custom {
-    color: var(--text-muted);
+.mobile-toggle {
+    display: none; /* Oculto no Desktop */
+    cursor: pointer;
+    color: var(--text-muted); /* Usando variável global */
+}
+
+.navbar-links {
     display: flex;
     align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    transition: color 0.3s;
+    gap: 1.5rem;
 }
 
-.nav-link-custom:hover {
-    color: white;
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    transition: color 0.2s;
+    padding: 0.5rem;
+    border-radius: 8px;
+    text-decoration: none; /* Importante para remover sublinhado de links */
 }
 
-.hidden { display: none !important; }
+.nav-item:hover,
+.nav-item.active {
+    color: var(--primary);
+    background-color: rgba(0, 198, 255, 0.05);
+}
+
+.nav-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-separator {
+    color: var(--text-muted); 
+    margin: 0 5px;
+    user-select: none;
+}
+
+.nav-group-title {
+    display: none; /* Oculto no Desktop */
+}
+
+.nav-auth {
+    display: flex;
+    align-items: center;
+}
+
+/* Utilitário para ocultar elementos via JS */
+.hidden {
+    display: none !important;
+}
+
+/* Responsividade Mobile (Tablet e Celular) */
+@media (max-width: 768px) {
+    .mobile-toggle {
+        display: block;
+    }
+
+    .navbar-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--bg-dark); /* Variável global */
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1rem;
+        gap: 0.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        transform: translateY(-20px);
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .nav-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+        padding: 0.5rem 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        margin: 0.5rem 0;
+    }
+    
+    .nav-separator {
+        display: none; /* Esconde a barra | no mobile */
+    }
+
+    .nav-group-title {
+        display: block;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-muted);
+        margin-bottom: 0.5rem;
+    }
+
+    .nav-item {
+        padding: 0.75rem;
+    }
+
+    .nav-auth {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .nav-auth button {
+        width: 100%;
+        justify-content: center;
+    }
+}
