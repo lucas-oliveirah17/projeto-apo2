@@ -1,5 +1,5 @@
 DROP DATABASE IF EXISTS chronos_apo2;
-CREATE DATABASE IF NOT EXISTS chronos_apo2 CHARSET utf8;
+CREATE DATABASE IF NOT EXISTS chronos_apo2 CHARSET utf8mb4;
 
 USE chronos_apo2;
 
@@ -9,13 +9,14 @@ CREATE TABLE usuarios (
     email VARCHAR(100) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
     telefone VARCHAR(20),
-    perfil INT NOT NULL, -- 1: Administrador, 2: Profissional, 3: Cliente
+    perfil INT NOT NULL,
     criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
     ativo BOOLEAN DEFAULT TRUE,
-    
     codigo_2fa VARCHAR(6),
     validade_2fa DATETIME
 );
+-- SELECT * FROM usuarios;
+-- DROP TABLE usuarios;
 
 CREATE TABLE servicos (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -25,6 +26,8 @@ CREATE TABLE servicos (
     preco DECIMAL(10, 2) NOT NULL,
     ativo BOOLEAN DEFAULT TRUE
 );
+-- SELECT * FROM servicos;
+-- DROP TABLE servicos;
 
 CREATE TABLE profissionais (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -34,6 +37,8 @@ CREATE TABLE profissionais (
     
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) 
 );
+-- SELECT * FROM profissionais;
+-- DROP TABLE profissionais;
 
 CREATE TABLE agendamentos (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -53,3 +58,5 @@ CREATE TABLE agendamentos (
     FOREIGN KEY (profissional_id) REFERENCES profissionais(id),
     FOREIGN KEY (servico_id) REFERENCES servicos(id)
 );
+-- SELECT * FROM agendamentos;
+-- DROP TABLE agendamentos;
