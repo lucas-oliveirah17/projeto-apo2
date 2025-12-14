@@ -13,7 +13,7 @@
         <div class="d-flex justify-content-between align-items-center mb-4 page-header">
             <div>
                 <h2 class="fw-bold">Profissionais</h2>
-                <p>Gerencie os profissionais da clínica</p>
+                <p>Gerencie a equipe e suas especialidades</p>
             </div>
             <a href="cadastroProfissional.jsp" class="btn btn-primary">
                 <i data-lucide="plus"></i> Novo Profissional
@@ -34,9 +34,8 @@
                 columns: [
                     { label: "ID", key: "id" },
                     { label: "Nome", key: "nome" },
-                    { label: "Especialidade", key: "especialidade" },
-                    { label: "Email", key: "email" },
-                    { label: "Telefone", key: "telefone" }
+                    { label: "E-mail", key: "email" },
+                    { label: "Especialidades", key: "especialidades" }
                 ]
             });
 

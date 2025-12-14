@@ -76,8 +76,12 @@ public class ProfissionalService {
         return new ProfissionalResponse(repository.save(existente));
     }
 
-    public void deletar(Long id) {
+    public void deletar(Long id) { 
         if (repository.findById(id) == null) throw new EntityNotFoundException("Profissional não encontrado.");
         repository.deleteById(id);
+        
+        ProfissionalResponse p = buscarPorId(id); 
+        Long usuarioId = p.getUsuarioId();
+        usuarioRepository.deleteById(usuarioId);
     }
 }
