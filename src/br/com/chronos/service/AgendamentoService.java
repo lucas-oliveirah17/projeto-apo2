@@ -68,21 +68,31 @@ public class AgendamentoService {
         
         if (inicio == null) throw new IllegalArgumentException("Data de início obrigatória.");
         
+        // Verifica se a data é no passado
+        if (inicio.isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Não é possível agendar em datas passadas.");
+        }
+        
         LocalDateTime fim = inicio.plusMinutes(servico.getDuracaoMinutos());
 
         // Verifica Conflitos de Horário (Lógica em Memória)
         List<Agendamento> agendaProfissional = repository.findByProfissionalId(profissional.getId());
-        
-        boolean conflito = agendaProfissional.stream().anyMatch(a -> {
-            // Lógica de interseção de horários: (InicioA < FimB) e (FimA > InicioB)
-            return inicio.isBefore(a.getDataHoraFim()) && fim.isAfter(a.getDataHoraInicio());
-        });
+                
+        boolean conflito = agendaProfissional.stream()
+                // IMPORTANTE: Ignora agendamentos que já foram cancelados para liberar o horário
+                .filter(a -> a.getStatus() != StatusAgendamento.CANCELADO_PELO_ADMINISTRADOR 
+                          && a.getStatus() != StatusAgendamento.CANCELADO_PELO_CLIENTE 
+                          && a.getStatus() != StatusAgendamento.CANCELADO_PELO_PROFISSIONAL) 
+                .anyMatch(a -> {
+                    // Lógica de interseção: (InicioA < FimB) E (FimA > InicioB)
+                    return inicio.isBefore(a.getDataHoraFim()) && fim.isAfter(a.getDataHoraInicio());
+                });
 
         if (conflito) {
             throw new IllegalArgumentException("O Profissional já possui agendamento neste horário.");
         }
 
-        // 4. Monta e Salva
+        // Monta e Salva
         Agendamento novo = new Agendamento();
         novo.setCliente(cliente);
         novo.setProfissional(profissional);
