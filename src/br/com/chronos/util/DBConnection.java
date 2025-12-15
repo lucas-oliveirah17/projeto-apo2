@@ -34,7 +34,7 @@ public class DBConnection {
 	}
 	
 	private void doConnection() {
-		String timezone = "&useTimezone=true&serverTimezone=UTC";// use o &useTimezone=true&serverTimezone=UTC para não ter problemas de data;
+	    String timezone = "&useTimezone=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8";
 		String url = "jdbc:mysql://"+this.host+":"+port+"/"+this.schema+"?user="+this.user+"&password="+this.password+timezone;
 		try {
 			// Class.forName("com.mysql.jdbc.Driver").newInstance();

@@ -25,7 +25,7 @@ import br.com.chronos.service.UsuarioService;
 public class DatabaseSeeder {
 
     // Configurações do Banco (Ajuste a senha se necessário)
-    private static final String DB_URL_ROOT = "jdbc:mysql://localhost:3306?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+    private static final String DB_URL_ROOT = "jdbc:mysql://localhost:3306?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8";
     private static final String DB_USER = "root";
     private static final String DB_PASS = "";
 
