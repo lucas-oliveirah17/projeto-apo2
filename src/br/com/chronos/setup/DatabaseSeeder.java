@@ -161,15 +161,16 @@ public class DatabaseSeeder {
 
     private static void criarAdmins() {
         System.out.println("- Criando Admins...");
-        adicionarUsuario("Admin Daniel", "daniel@admin.com", "admin123", "11999990001", PerfilUsuario.ADMINISTRADOR.getCodigo());
-        adicionarUsuario("Admin Lucas", "lucas@admin.com", "admin123", "11999990002", PerfilUsuario.ADMINISTRADOR.getCodigo());
+        adicionarUsuario("Admin Daniel", "daniel@chronos.com", "admin123", "11999990001", PerfilUsuario.ADMINISTRADOR.getCodigo());
+        adicionarUsuario("Admin Lucas", "lucas@chronos.com", "admin123", "11999990002", PerfilUsuario.ADMINISTRADOR.getCodigo());
+        adicionarUsuario("Admin Cleber", "cleber@chronos.com", "admin123", "11999990002", PerfilUsuario.ADMINISTRADOR.getCodigo());
     }
 
     private static void criarClientes() {
         System.out.println("- Criando Clientes...");
         for (int i = 1; i <= 20; i++) {
             String telefone = "1198888" + String.format("%04d", i);
-            adicionarUsuario("Cliente " + i, "cliente" + i + "@cliente.com", "cliente123", telefone, PerfilUsuario.CLIENTE.getCodigo());
+            adicionarUsuario("Cliente " + i, "cliente" + i + "@chronos.com", "cliente123", telefone, PerfilUsuario.CLIENTE.getCodigo());
         }
     }
 
@@ -182,7 +183,7 @@ public class DatabaseSeeder {
 
         for (int i = 0; i < 5; i++) {
             String telefone = "1197777" + String.format("%04d", i);
-            UsuarioResponse u = adicionarUsuario("Barbeiro " + (i+1), "profissional" + (i+1) + "@profissional.com", "profissional123", telefone, PerfilUsuario.PROFISSIONAL.getCodigo());
+            UsuarioResponse u = adicionarUsuario("Barbeiro " + (i+1), "profissional" + (i+1) + "@chronos.com", "profissional123", telefone, PerfilUsuario.PROFISSIONAL.getCodigo());
             
             ProfissionalRequest pDto = new ProfissionalRequest();
             pDto.setUsuarioId(u.getId());

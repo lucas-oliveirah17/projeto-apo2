@@ -79,10 +79,19 @@
         const btnLogout = document.getElementById("btnLogout");
 
         if (usuario) {
-            navGestao.classList.remove("hidden");
+            // Lógica dos Botões de Login/Logout (Para todos os logados)
             btnLogin.classList.add("hidden");
             btnLogout.classList.remove("hidden");
+
+            // 2. Lógica do Menu de Gestão (EXCLUSIVO PARA ADMIN)
+            if (usuario.perfil && usuario.perfil.toLowerCase() === 'administrador') {
+                navGestao.classList.remove("hidden");
+            } else {
+                navGestao.classList.add("hidden");
+            }
+            
         } else {
+            // Não logado
             navGestao.classList.add("hidden");
             btnLogin.classList.remove("hidden");
             btnLogout.classList.add("hidden");
