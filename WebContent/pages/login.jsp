@@ -13,19 +13,19 @@
         <div class="login-card fade-in">
             <div class="text-center mb-4">
                 <h2 class="login-title mb-1">Chronos</h2>
-                <p class="text-muted small">Entre para gerenciar sua barbearia</p>
+                <p class="text-light small">Entre para gerenciar sua barbearia</p>
             </div>
 
             <div id="feedback" class="alert alert-danger d-none text-center" role="alert"></div>
 
             <form onsubmit="handleLogin(event)">
                 <div class="mb-3">
-                    <label for="email" class="form-label text-muted small">E-mail</label>
+                    <label for="email" class="form-label text-light small">E-mail</label>
                     <input type="email" class="form-control form-control-dark" id="email" required placeholder="seu@email.com">
                 </div>
 
                 <div class="mb-4">
-                    <label for="senha" class="form-label text-muted small">Senha</label>
+                    <label for="senha" class="form-label text-light small">Senha</label>
                     <input type="password" class="form-control form-control-dark" id="senha" required placeholder="••••••••">
                 </div>
 
@@ -36,7 +36,7 @@
             </form>
 
             <div class="mt-4 text-center">
-                <p class="text-muted small">Não tem uma conta? <a href="#" class="text-primary text-decoration-none fw-bold">Cadastre-se</a></p>
+                <p class="text-light small">Não tem uma conta? <a href="#" class="text-primary text-decoration-none fw-bold">Cadastre-se</a></p>
             </div>
         </div>
     </div>

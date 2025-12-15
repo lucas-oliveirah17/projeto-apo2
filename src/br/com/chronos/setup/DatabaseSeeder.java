@@ -52,7 +52,7 @@ public class DatabaseSeeder {
             criarProfissionais();
             criarAgendamentos();
 
-            System.out.println("\n>>> SEED E ESTRUTURA CONCLUÍDOS COM SUCESSO! 🚀");
+            System.out.println("\n>>> SEED E ESTRUTURA CONCLUÍDOS COM SUCESSO!");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -169,7 +169,7 @@ public class DatabaseSeeder {
         System.out.println("- Criando Clientes...");
         for (int i = 1; i <= 20; i++) {
             String telefone = "1198888" + String.format("%04d", i);
-            adicionarUsuario("Cliente " + i, "cliente" + i + "@teste.com", "123456", telefone, PerfilUsuario.CLIENTE.getCodigo());
+            adicionarUsuario("Cliente " + i, "cliente" + i + "@cliente.com", "cliente123", telefone, PerfilUsuario.CLIENTE.getCodigo());
         }
     }
 
@@ -182,7 +182,7 @@ public class DatabaseSeeder {
 
         for (int i = 0; i < 5; i++) {
             String telefone = "1197777" + String.format("%04d", i);
-            UsuarioResponse u = adicionarUsuario("Barbeiro " + (i+1), "profissional" + (i+1) + "@teste.com", "123456", telefone, PerfilUsuario.PROFISSIONAL.getCodigo());
+            UsuarioResponse u = adicionarUsuario("Barbeiro " + (i+1), "profissional" + (i+1) + "@profissional.com", "profissional123", telefone, PerfilUsuario.PROFISSIONAL.getCodigo());
             
             ProfissionalRequest pDto = new ProfissionalRequest();
             pDto.setUsuarioId(u.getId());

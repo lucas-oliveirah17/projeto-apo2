@@ -33,7 +33,7 @@
                 container.innerHTML = `
                     <div class="p-5 rounded-3 border border-secondary" style="background: rgba(30, 41, 59, 0.5);">
                         <h2 class="text-primary mb-3">Bem-vindo de volta, \${usuario.nome}!</h2>
-                        <p class="lead text-muted">Perfil: \${usuario.perfil}</p>
+                        <p class="lead text-light">Perfil: \${usuario.perfil}</p>
                         <hr class="my-4 border-secondary">
                         <p>Acesse o menu de gestão acima para controlar agendamentos.</p>
                         <a class="btn btn-primary btn-lg" href="gestaoAgendamento.jsp" role="button">
@@ -45,7 +45,7 @@
                 container.innerHTML = `
                     <div class="p-5 rounded-3 border border-secondary" style="background: rgba(30, 41, 59, 0.5);">
                         <h2 class="mb-3">Você não está autenticado.</h2>
-                        <p class="lead text-muted">Por favor, faça login para acessar o sistema.</p>
+                        <p class="lead text-light">Por favor, faça login para acessar o sistema.</p>
                         <a href="login.jsp" class="btn btn-primary btn-lg px-4">
                             Login <i data-lucide="log-in" class="ms-2"></i>
                         </a>

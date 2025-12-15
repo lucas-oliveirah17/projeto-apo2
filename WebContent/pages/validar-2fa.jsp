@@ -15,7 +15,7 @@
             </div>
 
             <h3 class="fw-bold text-light">Verificação de Segurança</h3>
-            <p class="text-muted mb-4">Enviamos um código de 6 dígitos para o seu e-mail.</p>
+            <p class="text-light mb-4">Enviamos um código de 6 dígitos para o seu e-mail.</p>
 
             <div id="feedback" class="alert alert-danger d-none" role="alert"></div>
 
@@ -29,7 +29,7 @@
                 <button type="submit" class="btn btn-primary w-100">Validar Código</button>
                 
                 <div class="mt-3">
-                    <a href="login.jsp" class="text-muted small text-decoration-none">Voltar para Login</a>
+                    <a href="login.jsp" class="text-light small text-decoration-none">Voltar para Login</a>
                 </div>
             </form>
         </div>
