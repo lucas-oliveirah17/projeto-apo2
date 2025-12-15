@@ -25,7 +25,6 @@ public class EncodingFilter implements Filter {
         
         // Força a resposta para o navegador ser em UTF-8
         res.setCharacterEncoding("UTF-8");
-        res.setContentType("application/json; charset=UTF-8");
 
         // Continua o fluxo normal da requisição
         chain.doFilter(request, response);
