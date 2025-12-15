@@ -29,7 +29,6 @@ public class AgendamentoController extends HttpServlet {
 
         try {
             if (pathInfo == null || pathInfo.equals("/")) {
-                // Filtro opcional: ?clienteId=1
                 String clienteIdParam = request.getParameter("clienteId");
                 List<AgendamentoResponse> lista;
                 
@@ -41,9 +40,7 @@ public class AgendamentoController extends HttpServlet {
                 Utilities.enviarJson(response, lista, HttpServletResponse.SC_OK);
             } else {
                 Long id = Long.parseLong(pathInfo.substring(1));
-                
                 AgendamentoResponse agendamento = service.buscarPorId(id);
-                
                 Utilities.enviarJson(response, agendamento, HttpServletResponse.SC_OK);
             }
         } catch (Exception e) {
@@ -67,27 +64,38 @@ public class AgendamentoController extends HttpServlet {
             if (pathInfo == null || pathInfo.equals("/")) throw new IllegalArgumentException("ID obrigatório.");
             
             Long id = Long.parseLong(pathInfo.substring(1));
-            AgendamentoRequest dto = Utilities.lerJson(request, AgendamentoRequest.class);
             
+            // --- NOVA LÓGICA DE AÇÃO RÁPIDA (Status) ---
+            String acao = request.getParameter("acao");
+            if (acao != null && !acao.isEmpty()) {
+                // Se tem o parâmetro 'acao', apenas troca o status
+                AgendamentoResponse atualizado = service.alterarStatus(id, acao);
+                Utilities.enviarJson(response, atualizado, HttpServletResponse.SC_OK);
+                return; // Encerra aqui para não tentar ler JSON
+            }
+            // ---------------------------------------------
+            
+            // Se não tem 'acao', é uma edição completa via JSON
+            AgendamentoRequest dto = Utilities.lerJson(request, AgendamentoRequest.class);
             AgendamentoResponse atualizado = service.atualizar(id, dto);
             Utilities.enviarJson(response, atualizado, HttpServletResponse.SC_OK);
+            
         } catch (Exception e) {
+            e.printStackTrace(); // Ajuda a ver erros no console do servidor
             Utilities.enviarErro(response, e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 
-    // DELETE = Cancelar
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String pathInfo = request.getPathInfo();
             if (pathInfo == null || pathInfo.equals("/")) throw new IllegalArgumentException("ID obrigatório.");
 
             Long id = Long.parseLong(pathInfo.substring(1));
-            service.cancelar(id);
+            service.excluir(id); // Alterado para excluir (Soft Delete)
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         } catch (Exception e) {
             Utilities.enviarErro(response, e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
     }
-    
 }

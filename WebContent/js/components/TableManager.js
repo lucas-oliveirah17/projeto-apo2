@@ -8,6 +8,7 @@ class TableManager {
      * @param {string} config.endpoint - URL da API (ex: "/usuarios")
      * @param {Array} config.columns - Definição das colunas [{ label: "Nome", key: "nome" }]
      * @param {string} config.containerId - ID da div onde a tabela será renderizada
+     * @param {Function} [config.renderActions] - (Opcional) Função que retorna o HTML dos botões de ação
      */
     constructor(config) {
         this.config = config;
@@ -62,25 +63,38 @@ class TableManager {
 
         // Linhas
         html += data.map(item => `
-            <tr>
-                ${this.config.columns.map(col => `
-                    <td>${this.formatValue(item, col)}</td>
-                `).join('')}
-                <td class="text-end">
-                    <button class="btn btn-sm btn-outline-info me-2" onclick="editItem(${item.id})">
-                        <i data-lucide="edit-2" size="16"></i>
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="deleteItem(${item.id})">
-                        <i data-lucide="trash-2" size="16"></i>
-                    </button>
-                </td>
-            </tr>
-        `).join('');
+                    <tr>
+                        ${this.config.columns.map(col => `
+                            <td>${this.formatValue(item, col)}</td>
+                        `).join('')}
+                        <td class="text-end">
+                            ${this.renderActionButtons(item)}
+                        </td>
+                    </tr>
+                `).join('');
 
         html += `</tbody></table></div>`;
         
         this.container.innerHTML = html;
         lucide.createIcons();
+    }
+    
+    // Decide quais botões mostrar
+    renderActionButtons(item) {
+        // Se a página passou uma função customizada de ações, usa ela
+        if (this.config.renderActions) {
+            return this.config.renderActions(item);
+        }
+
+        // Caso contrário, usa o padrão (Editar + Excluir)
+        return `
+            <button class="btn btn-sm btn-outline-info me-2" onclick="editItem(${item.id})" title="Editar">
+                <i data-lucide="edit-2" size="16"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" onclick="deleteItem(${item.id})" title="Excluir">
+                <i data-lucide="trash-2" size="16"></i>
+            </button>
+        `;
     }
 
     // Função auxiliar para acessar propriedades aninhadas (ex: perfil.descricao)
@@ -109,7 +123,6 @@ window.deleteItem = async (id) => {
 
 window.editItem = (id) => {
     // Redireciona para página de cadastro com ID na URL
-    // Ex: gestaoUsuario.jsp -> cadastroUsuario.jsp?id=1
     const currentPage = window.location.pathname;
     const cadastroPage = currentPage.replace('gestao', 'cadastro');
     window.location.href = `${cadastroPage}?id=${id}`;

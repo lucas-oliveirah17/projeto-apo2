@@ -40,20 +40,57 @@
                     { 
                         label: "Status", 
                         key: "status",
-                        format: (val) => {
-                            let color = 'secondary';
+                        format: function(val) {
+                            var color = 'secondary';
                             if (val === 'Pendente') color = 'warning';
                             if (val === 'Confirmado') color = 'success';
                             if (val === 'Concluído') color = 'primary';
-                            if (val === 'Cancelado') color = 'danger';
-                            return '<span class="badge bg-' + color + '">' + val + '</span>';
+                            if (val === 'Cancelado pelo Administrador' || val === 'Cancelado pelo Cliente') color = 'danger';
+                            
+                            return '<span class="badge bg-' + color + '">' + (val || '-') + '</span>';
                         }
                     }
-                ]
+                ],
+                renderActions: function(item) {
+                    return '<div class="btn-group" role="group">' +
+                        '<button class="btn btn-sm btn-outline-success" onclick="window.alterarStatus(' + item.id + ', \'confirmar\')" title="Confirmar">' +
+                            '<i data-lucide="check" size="16"></i>' +
+                        '</button>' +
+                        '<button class="btn btn-sm btn-outline-warning" onclick="window.alterarStatus(' + item.id + ', \'pendente\')" title="Pendente">' +
+                            '<i data-lucide="clock" size="16"></i>' +
+                        '</button>' +
+                        '<button class="btn btn-sm btn-outline-primary" onclick="window.alterarStatus(' + item.id + ', \'concluir\')" title="Concluir">' +
+                            '<i data-lucide="check-circle" size="16"></i>' +
+                        '</button>' +
+                        '<button class="btn btn-sm btn-outline-secondary" onclick="window.alterarStatus(' + item.id + ', \'cancelar\')" title="Cancelar Agendamento">' +
+                            '<i data-lucide="x-circle" size="16"></i>' +
+                        '</button>' +
+                    '</div>' +
+                    '<div class="btn-group ms-2" role="group">' +
+                        '<button class="btn btn-sm btn-outline-info" onclick="window.editItem(' + item.id + ')" title="Editar">' +
+                            '<i data-lucide="edit-2" size="16"></i>' +
+                        '</button>' +
+                        '<button class="btn btn-sm btn-outline-danger" onclick="window.deleteItem(' + item.id + ')" title="Excluir (Soft Delete)">' +
+                            '<i data-lucide="trash-2" size="16"></i>' +
+                        '</button>' +
+                    '</div>';
+                }
             });
 
             window.currentTableManager.init();
         });
+
+        // Função global para chamar o Backend trocando o status
+        window.alterarStatus = async function(id, acao) {
+            try {
+                // Chama PUT /api/agendamentos/1?acao=confirmar
+                await Api.put('/agendamentos/' + id + '?acao=' + acao, {});
+                window.currentTableManager.init(); // Recarrega tabela
+            } catch (error) {
+                console.error(error);
+                alert("Erro ao alterar status: " + (error.message || "Erro desconhecido"));
+            }
+        };
     </script>
 </body>
 </html>
